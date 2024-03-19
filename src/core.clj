@@ -283,12 +283,12 @@
   (->
    templates-dir
    (io/file "bb.edn")
-   (fs/write-bytes (.getBytes bb-template)))
+   (fs/write-bytes (.getBytes "here goes the desired file content")))
 
   (->
    templates-dir
    (io/file ".prettierrc.json")
-   (fs/write-bytes (.getBytes (get prettierrc-content "js"))))
+   (fs/write-bytes (.getBytes "here goes the desired file content")))
 
   ;; creates a dir for templates if it doesn't exists and/or returns its content
   (->
