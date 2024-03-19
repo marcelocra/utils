@@ -1,0 +1,198 @@
+;;
+;; TODO: migrate this to programs/utils/core.clj
+;;
+{:min-bb-version "1.3.188"
+
+ :tasks
+ {:requires ([babashka.fs :as fs]
+             [babashka.cli :as cli])
+  :init (do 
+          (def cli-options
+            {:cljs-ns {:default "core"}
+             :time {:default "30m"}
+             :text {:default "Olá, mundo!"}
+             :name {:default "hello-world"}})
+          (def parsed-cli-args (cli/parse-opts *command-line-args* {:spec cli-options}))
+
+          (defn now
+            "Creates a date and time string for the current moment."
+            [& {:keys [format-str]}]
+            (let [date (java.util.Date.)]
+              (-> (java.text.SimpleDateFormat. (if (nil? format-str)
+                                                 "yyyy-MM-dd HH:mm:ss.SSS"
+                                                 format-str))
+                  (.format date))))
+
+          (defn logging
+            "Logs timestamp with task name."
+            [text-to-log]
+            (let [log (Object.)
+                  current-task-name (:name (current-task))] 
+              (locking log
+                (println 
+                  (format 
+                    "[ %s | %s ] %s"
+                    (now)
+                    (if (nil? current-task-name) "global" current-task-name)
+                    text-to-log)))))
+
+          (logging parsed-cli-args))
+  :enter (logging "starting")
+  :leave (logging "done!")
+
+  hello-world
+  {:doc "Checks if the bb tasks are working."
+   :task (shell "echo 'hello, world!'")}
+
+  nrepl
+  {:doc "Creates a babashka nrepl server and saves its port to a file, to be read by other tools."
+   :requires ([babashka.fs :as fs]
+              [babashka.nrepl.server :as srv])
+   :task (do (srv/start-server! {:host "localhost"
+                                 :port 1339})
+             (spit ".nrepl-port" "1339")
+             (-> (Runtime/getRuntime)
+                 (.addShutdownHook
+                   (Thread. (fn [] (fs/delete ".nrepl-port")))))
+             (deref (promise)))}
+
+  cljs
+  {:doc "Runs a simple cljs repl, without shadow-cljs or anything else."
+   :task (shell 
+           (format 
+             "clj -M:cljs
+             --main cljs.main
+             --repl-opts \"%s\"
+             --compile %s
+             --repl"
+             (str {:launch-browser false})
+             (:cljs-ns parsed-cli-args)))}
+
+  cljs-adv
+  {:doc "Creates a production build of a cljs project."
+   :task (shell 
+           (format 
+             "clj -M:cljs
+             --main cljs.main
+             --optimizations advanced
+             --compile %s"
+             (:cljs-ns parsed-cli-args)))}
+
+  cljs-serve
+  {:doc "Checks if the generated production build still works, as a lot of advanced compilation and deletions happen."
+   :task (shell "clj -M:cljs --main cljs.main --serve")}
+
+  cljs-node-compile
+  {:doc "Creates a javascript output for nodejs."
+   :task (shell 
+           (format 
+             "clj -M:cljs
+             --main cljs.main
+             --target node
+             --output-to node/out/main.js
+             --compile %s"
+             (:cljs-ns parsed-cli-args)))}
+
+  cljs-node-repl
+  {:doc "Runs a nodejs repl."
+   :task (shell "clj -M:cljs:cider-nrepl
+                --main cljs.main
+                --output-to node/out/main.js
+                --repl-env node")}
+
+  notify
+  {:doc "Creates a desktop notification after some time. Time format: 14s (seconds), 20m (minutes), 3h (hours)."
+   :task (do
+           (shell (format "sleep '%s'" (:time parsed-cli-args)))
+           (shell (format "spd-say -w -l pt-BR -p 100 -r -30 -R 100 -m all '%s'" (:text parsed-cli-args)))
+           (shell (format "notify-send '%s'" (:text parsed-cli-args))))}
+
+  notify-sound
+  {:doc "Creates an audio notification after some time."
+   :task (do
+           (shell (format "sleep '%s'" (:time parsed-cli-args)))
+           (shell (format "spd-say -w -l pt-BR -p 100 -r -30 -R 100 -m all '%s'" (:text parsed-cli-args))))}
+
+  new-fable
+  {:doc "Creates a new F# Fable project, ready to compile for JavaScript"
+   :task (let [project-name (:name parsed-cli-args)]
+           (do
+             (println "Run the following commands, in this order: \n\n")
+             (println (format "mkdir %s" project-name))
+             (println (format "cd %s" project-name))
+             (println "dotnet new console -lang F#
+dotnet new tool-manifest
+
+dotnet tool install fable
+
+dotnet tool install fantomas
+
+dotnet add package Fable.Core
+
+dotnet fable  # or --lang=typescript or --lang=python
+
+---
+
+At this point you should have a fully functioning example.
+To create a full JavaScript example, keep going:
+
+Create a project with `npm init -y` and make sure it has
+`type: \"module\"` in the package.json
+
+You should be able to run `node Program.fs.js`
+
+Add node bindings: dotnet add package Fable.Node
+
+Update the Program.fs file to use some of those:
+
+open Node.Api
+fs.writeFileSync(\"test.txt\",  \"Hello World\")
+
+Run in watch mode: dotnet fable watch
+
+---
+
+To use in the browser with vite:
+
+npm i -D vite
+
+Create a vite.config.ts with the following content:
+
+import { defineConfig } from 'vite'
+// https://vitejs.dev/config/
+export default defineConfig({
+    clearScreen: false,
+    server: {
+        watch: {
+            ignored: [
+                \"**/*.fs\" // Don't watch F# files
+            ]
+        }
+    }
+})
+
+Then an html:
+
+<!DOCTYPE html>
+<html lang=\"en\">
+  <head>
+    <meta charset=\"UTF-8\" />
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />
+    <title>Fable</title>
+  </head>
+  <body>
+    <div id=\"root\"></div>
+    <script type=\"module\" src=\"/Program.fs.js\"></script>
+  </body>
+</html>
+                      
+Finally, run vite: npx vite
+                      
+")))}
+
+  ;; Write next task above this comment.
+  }
+
+
+ ;; Write next setting above this comment.
+ }
