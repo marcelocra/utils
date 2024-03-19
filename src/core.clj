@@ -4,12 +4,12 @@
 ;; Command line utils.
 (ns core
   (:require
-    [clojure.java.shell :refer [sh]]
-    [clojure.string :as s]
-    [babashka.fs :as fs]
-    [babashka.cli :as cli]
-    [clojure.java.io :as io]
-    [clojure.repl :refer [doc]]))
+   [clojure.java.shell :refer [sh]]
+   [clojure.string :as s]
+   [babashka.fs :as fs]
+   [babashka.cli :as cli]
+   [clojure.java.io :as io]
+   [clojure.repl :refer [doc]]))
 
 (def debug false)
 
@@ -102,11 +102,11 @@
 (defn free-ram
   "Prints the amount of free ram memory."
   []
-  (println 
-    (->>
-      (:out (sh "cat" "/proc/meminfo"))
-      (re-find #"MemFree.*")
-      (re-find #"[0-9]+.*"))))
+  (println
+   (->>
+    (:out (sh "cat" "/proc/meminfo"))
+    (re-find #"MemFree.*")
+    (re-find #"[0-9]+.*"))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -116,7 +116,7 @@
 (defn pretty
   "Creates a prettierrc file for one of the following languages (use the options from the parenthesis): JavaScript (default or :js)."
   []
-  (let [file-name (file-to-write (:prettier file-names))] 
+  (let [file-name (file-to-write (:prettier file-names))]
     (if (fs/exists? file-name)
       (println (format "File '%s' exists. Aborting." file-name))
       (let [lang (:lang parsed-cli-args)
@@ -156,7 +156,7 @@
 (defn bb
   "Creates a new bb.edn file in the current directory."
   []
-  (let [file-name (file-to-write (:bb file-names))] 
+  (let [file-name (file-to-write (:bb file-names))]
     (if (fs/exists? file-name)
       (println (format "File '%s' exists. Aborting." file-name))
       (let [lang (:lang parsed-cli-args)
@@ -202,7 +202,7 @@
   (if (fs/exists? file-name)
     (println (format "File '%s' exists. Aborting." file-name))
     (let [content (fs/read-all-bytes (produce-file-path (or template file-name)))]
-      (if debug 
+      (if debug
         (println (str "DEBUG mode:\ncreate "
                       file-name
                       "\nwith content:\n\n"
@@ -212,7 +212,7 @@
 (defn shadow
   "Creates a shadow-cljs.edn file and a .gitignore in the current directory."
   []
-  (doseq [{:keys [file-name template]} [{:file-name "shadow-cljs.edn"} 
+  (doseq [{:keys [file-name template]} [{:file-name "shadow-cljs.edn"}
                                         {:file-name ".gitignore"
                                          :template "shadow-cljs.gitignore"}]]
     (create-file-from-template file-name template)))
@@ -225,7 +225,7 @@
   "Creates a build.clj file in the current directory, to help running commands."
   []
   (let [template :build
-        file-name (file-to-write (template file-names))] 
+        file-name (file-to-write (template file-names))]
     (if (fs/exists? file-name)
       (println (format "File '%s' exists. Aborting." file-name))
       (let [content (fs/read-all-bytes (get template-files template))]
@@ -248,15 +248,15 @@
 
 (defn help []
   (println
-    (str "Choose one of the commands below: \n\n"
-         (s/join "\n"
-                   (map #(format "%-25s%s" (:name %) (:doc %))
-                        [(meta #'free-ram)
-                         (meta #'pretty)
-                         (meta #'time-in)
-                         (meta #'bb)
-                         (meta #'toggle-notifications)
-                         (meta #'shadow)])))))
+   (str "Choose one of the commands below: \n\n"
+        (s/join "\n"
+                (map #(format "%-25s%s" (:name %) (:doc %))
+                     [(meta #'free-ram)
+                      (meta #'pretty)
+                      (meta #'time-in)
+                      (meta #'bb)
+                      (meta #'toggle-notifications)
+                      (meta #'shadow)])))))
 
 
 ;; Run the selected command.
@@ -281,24 +281,24 @@
 
   ;; creates one file for each of the templates
   (->
-    templates-dir
-    (io/file "bb.edn")
-    (fs/write-bytes (.getBytes bb-template)))
+   templates-dir
+   (io/file "bb.edn")
+   (fs/write-bytes (.getBytes bb-template)))
 
   (->
-    templates-dir
-    (io/file ".prettierrc.json")
-    (fs/write-bytes (.getBytes (get prettierrc-content "js"))))
+   templates-dir
+   (io/file ".prettierrc.json")
+   (fs/write-bytes (.getBytes (get prettierrc-content "js"))))
 
   ;; creates a dir for templates if it doesn't exists and/or returns its content
   (->
-    templates-dir
-    (fs/create-dirs)
-    (fs/list-dir))
-  
+   templates-dir
+   (fs/create-dirs)
+   (fs/list-dir))
 
 
-  (-> (fs/cwd) 
+
+  (-> (fs/cwd)
       (.toString))
 
   ;; rcf - rich comment form
