@@ -9,9 +9,11 @@
    [babashka.fs :as fs]
    [babashka.cli :as cli]
    [clojure.java.io :as io]
-   [clojure.repl :refer [doc]]))
+   [clojure.repl :refer [doc]]
+   [clojure.pprint :as pp :refer [pprint] :rename {pprint p}]))
 
 (def debug false)
+(def projects-dir (System/getenv "MCRA_PROJECTS_FOLDER"))
 
 (if (nil? (System/getenv "MCRA_CLI_UTILS_PATH"))
   (do
@@ -86,7 +88,9 @@
 ;; CLI helper
 
 (def cli-options
-  {:lang {:default "js"}})
+  {:lang {:default "js"}
+   :fix {:default false}
+   :proj {:default nil}})
 
 ;; Made dynamic to simplify testing.
 (def ^:dynamic parsed-cli-args
@@ -235,6 +239,75 @@
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
+(defn fmt
+  "Formats Clojure files using cljfmt."
+  []
+  (println 
+    (apply sh (-> 
+                "clj -Tcljfmt %s" 
+                (format (if (:fix parsed-cli-args) "fix" "check"))
+                (s/split #" ")))))
+
+
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+(defn numbered-projs []
+  (let [projs (-> projects-dir
+                  (fs/list-dir)
+                  (->> 
+                    (filter #(fs/directory? %))
+                    (into (sorted-set-by (fn [a b] (.compareTo 
+                                                     (fs/last-modified-time b) 
+                                                     (fs/last-modified-time a)))))
+                    (map #(s/replace % (re-pattern (str projects-dir "/")) ""))
+                    #_(s/join "\n")))
+        ids (range 0 (count projs))]
+    (into (sorted-map) (zipmap ids projs))))
+
+(defn code
+  "Opens VSCode with the given project."
+  []
+  (let [proj (:proj parsed-cli-args)] 
+    (if (or (nil? proj) (boolean? proj))
+      (do
+        (println "Choose one of the projects below, by name or number.")
+        (println (format "They are in '%s':" projects-dir))
+        (p (numbered-projs)))
+      (let [num-to-proj (numbered-projs)
+            proj-dir (io/file projects-dir (if (int? proj) 
+                                             (get num-to-proj proj (get num-to-proj 0))
+                                             proj))]
+        (sh "code" "." :dir proj-dir)))))
+
+(comment
+  ;; print all projects
+  (binding [parsed-cli-args {:proj nil}]
+    (code))
+
+  ;; open the first one
+  (binding [parsed-cli-args {:proj 0}]
+    (code))
+
+  ;; open some in the middle
+  (binding [parsed-cli-args {:proj 5}]
+    (code))
+
+  ;; open the last one
+  (binding [parsed-cli-args {:proj 27}]
+    (code))
+
+  ;; blow it up!
+  (binding [parsed-cli-args {:proj 28}]
+    (code))
+
+  ;; rcf - rich comment form
+  )
+
+
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 ;; Next command here.
 
 
@@ -256,7 +329,9 @@
                       (meta #'time-in)
                       (meta #'bb)
                       (meta #'toggle-notifications)
-                      (meta #'shadow)])))))
+                      (meta #'shadow)
+                      (meta #'fmt)
+                      (meta #'code)])))))
 
 
 ;; Run the selected command.
