@@ -90,7 +90,8 @@
 (def cli-options
   {:lang {:default "js"}
    :fix {:default false}
-   :proj {:default nil}})
+   :proj {:default nil}
+   :name {:default "new"}})
 
 ;; Made dynamic to simplify testing.
 (def ^:dynamic parsed-cli-args
@@ -207,10 +208,10 @@
     (println (format "File '%s' exists. Aborting." file-name))
     (let [content (fs/read-all-bytes (produce-file-path (or template file-name)))]
       (if debug
-        (println (str "DEBUG mode:\ncreate "
-                      file-name
-                      "\nwith content:\n\n"
-                      (String. content)))
+        (println (str "DEBUG mode:\ncreate file: '" file-name "'"
+                      "\nwith content (between lines):\n------------------------------------\n"
+                      (String. content)
+                      "------------------------------------"))
         (fs/write-bytes file-name content)))))
 
 (defn shadow
@@ -308,6 +309,25 @@
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
+(defn git-orphan
+  "Creates a branch with no history in the current repo."
+  []
+  (:out (sh "git" "switch" "--orphan" (:name parsed-cli-args))))
+
+
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+(defn nvmrc
+  "Creates a .nvmrc file in the current dir."
+  []
+  (doseq [{:keys [file-name template]} [{:file-name ".nvmrc"}]]
+    (create-file-from-template file-name template)))
+
+
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
+;; -----------------------------------------------------------------------------
 ;; Next command here.
 
 
@@ -331,7 +351,10 @@
                       (meta #'toggle-notifications)
                       (meta #'shadow)
                       (meta #'fmt)
-                      (meta #'code)])))))
+                      (meta #'code)
+                      (meta #'git-orphan)
+                      (meta #'nvmrc)
+                      ])))))
 
 
 ;; Run the selected command.
