@@ -91,7 +91,7 @@
   {:lang {:default "js"}
    :fix {:default false}
    :proj {:default nil}
-   :name {:default "new"}})
+   :name {:default nil}})
 
 ;; Made dynamic to simplify testing.
 (def ^:dynamic parsed-cli-args
@@ -312,7 +312,12 @@
 (defn git-orphan
   "Creates a branch with no history in the current repo."
   []
-  (:out (sh "git" "switch" "--orphan" (:name parsed-cli-args))))
+  (let [name (:name parsed-cli-args)] 
+    (if (nil? name)
+      (do
+        (println "Please, provide the :name argument with a name for the new branch.")
+        (System/exit 1))
+      (:out (sh "git" "switch" "--orphan" name)))))
 
 
 ;; -----------------------------------------------------------------------------
