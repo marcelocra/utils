@@ -174,15 +174,44 @@
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
+(defn notify [text & {:keys [expire-time]
+                      :or {expire-time 3000}}]
+  (sh "notify-send" (str "--expire-time=" expire-time) "Notification status" text))
 
 (defn toggle-notifications
-  "Enables/disables desktop notifications in an ubuntu/mint with cinnamon de."
+  "Enables/disables desktop notifications in an ubuntu/mint with cinnamon de.
+
+  Displays the resulting output of the command as a desktop.... well... that
+  won't work hahahahahaha. We need to do as follows:
+
+  - if notifications are currently enabled, we say that and mention that we will
+    disable them
+  - if notifications are disabled, we enable them and notify the user that they
+    were enabled
+
+  The command with possible options is:
+
+  notify-send [options] {summary} body
+
+  Options:
+    --urgency={low,normal,critical} 
+    --expire-time={millis}
+    --icon={filename,stock icon}
+    --category={type,type,...}      ;; optional, but not sure about it
+    --hint=type:name:value          ;; same as above
+
+  More documentation here: https://galago-project.org/specs/notification/0.9/index.html
+  "
   []
   (let [enabled-status "true\n"
         notifications-enabled?  (= enabled-status (:out (sh "gsettings"
                                                             "get"
                                                             "org.cinnamon.desktop.notifications"
-                                                            "display-notifications")))]
+                                                            "display-notifications")))
+        _ (and notifications-enabled? 
+               (notify (str
+                         "About to disable notifications... won't be able to "
+                         "notify you about the result, of course haha")))]
     (let [result (sh "gsettings"
                      "set"
                      "org.cinnamon.desktop.notifications"
@@ -192,10 +221,12 @@
                                    "get"
                                    "org.cinnamon.desktop.notifications"
                                    "display-notifications"))
-          user-feedback (if (= current-status enabled-status)
-                          "Notifications enabled"
-                          "Notifications disabled")]
-      (println user-feedback))))
+          currently-enabled? (= current-status enabled-status)]
+      (if currently-enabled?
+        (do
+          (println "Notifications enabled!")
+          (notify "Notifications enabled!"))
+        (println "Notifications disabled!")))))
 
 
 ;; -----------------------------------------------------------------------------
