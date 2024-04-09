@@ -174,14 +174,8 @@
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
-(defn notify [text & {:keys [expire-time]
-                      :or {expire-time 3000}}]
-  (sh "notify-send" (str "--expire-time=" expire-time) "Notification status" text))
-
-(defn toggle-notifications
-  "Enables/disables desktop notifications in an ubuntu/mint with cinnamon de.
-
-  Displays the resulting output of the command as a desktop.... well... that
+(defn notify
+  "Displays the resulting output of the command as a desktop.... well... that
   won't work hahahahahaha. We need to do as follows:
 
   - if notifications are currently enabled, we say that and mention that we will
@@ -200,8 +194,13 @@
     --category={type,type,...}      ;; optional, but not sure about it
     --hint=type:name:value          ;; same as above
 
-  More documentation here: https://galago-project.org/specs/notification/0.9/index.html
-  "
+  More documentation here: https://galago-project.org/specs/notification/0.9/index.html"
+  [text & {:keys [expire-time]
+                      :or {expire-time 3000}}]
+  (sh "notify-send" (str "--expire-time=" expire-time) "Notification status" text))
+
+(defn toggle-notifications
+  "Enables/disables desktop notifications in an ubuntu/mint with cinnamon de."
   []
   (let [enabled-status "true\n"
         notifications-enabled?  (= enabled-status (:out (sh "gsettings"
