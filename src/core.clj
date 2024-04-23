@@ -4,16 +4,32 @@
 ;; Command line utils.
 (ns core
   (:require
-   [clojure.java.shell :refer [sh]]
-   [clojure.string :as s]
-   [babashka.fs :as fs]
-   [babashka.cli :as cli]
-   [clojure.java.io :as io]
-   [clojure.repl :refer [doc]]
-   [clojure.pprint :as pp :refer [pprint] :rename {pprint p}]))
+    [clojure.java.shell :refer [sh]]
+    [clojure.string :as s]
+    [babashka.fs :as fs]
+    [babashka.cli :as cli]
+    [clojure.java.io :as io]
+    [clojure.repl :refer [doc]]
+    [clojure.pprint :as pp :refer [pprint] :rename {pprint p}]))
 
 (def debug false)
 (def projects-dir (System/getenv "MCRA_PROJECTS_FOLDER"))
+(def templates-for-new-projects ["astro" "react" "deno" "bun" "clj" "cljs"])
+(defn js-package-mananger-note []
+  (println (->> ["Default Nodejs package manager: `pnpm`"
+                 ""
+                 "You can change that by providing the `js-package-manager` option"
+                 "in the command line. Use whichever you prever, but commands were"
+                 "only tested with `pnpm`."
+                 ""
+                 "We print the command we are executing, so you can try to adapt it to use"
+                 "with your preferred package manager."
+                 ""
+                 "Good luck!"
+                 ""
+                 "(p.s.: if you don't have a preferred package manager, try `pnpm`."
+                 " It is very good!)"]
+                (s/join "\n"))))
 
 (if (nil? (System/getenv "MCRA_CLI_UTILS_PATH"))
   (do
@@ -83,39 +99,34 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 ;; CLI helper
 
 (def cli-options
   {:lang {:default "js"}
    :fix {:default false}
    :proj {:default nil}
-   :name {:default nil}})
+   :name {:default nil}
+   :js-package-manager {:default "pnpm"}})
 
 ;; Made dynamic to simplify testing.
-(def ^:dynamic parsed-cli-args
+(def ^:dynamic args
   (cli/parse-opts *command-line-args* {:spec cli-options}))
 
 (def cmd-str (first *command-line-args*))
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 
 (defn free-ram
   "Prints the amount of free ram memory."
   []
   (println
-   (->>
-    (:out (sh "cat" "/proc/meminfo"))
-    (re-find #"MemFree.*")
-    (re-find #"[0-9]+.*"))))
+    (->>
+      (:out (sh "cat" "/proc/meminfo"))
+      (re-find #"MemFree.*")
+      (re-find #"[0-9]+.*"))))
 
 
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 
 (defn pretty
@@ -124,7 +135,7 @@
   (let [file-name (file-to-write (:prettier file-names))]
     (if (fs/exists? file-name)
       (println (format "File '%s' exists. Aborting." file-name))
-      (let [lang (:lang parsed-cli-args)
+      (let [lang (:lang args)
             content (fs/read-all-bytes (get-in template-files [:prettier lang] (get-in template-files [:prettier "js"])))]
         (if (nil? content)
           (println (str "Option '" lang "' not available. See help."))
@@ -132,13 +143,11 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 
 (defn time-in
   "Returns the current time in the given timezone or America/New_York (default)."
   []
-  (let [tz (get parsed-cli-args :tz "America/New_York")
+  (let [tz (get args :tz "America/New_York")
         now (java.time.ZonedDateTime/now)
         timezone (java.time.ZoneId/of tz)
         tz-time (.withZoneSameInstant now timezone)
@@ -147,15 +156,13 @@
 
 ;; Example on how to create a binding to test functions.
 (comment
-  (binding [parsed-cli-args {:tz "America/Toronto"}]
+  (binding [args {:tz "America/Toronto"}]
     (time-in))
 
   ;; rcf - rich comment form
   )
 
 
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 
 (defn bb
@@ -164,7 +171,7 @@
   (let [file-name (file-to-write (:bb file-names))]
     (if (fs/exists? file-name)
       (println (format "File '%s' exists. Aborting." file-name))
-      (let [lang (:lang parsed-cli-args)
+      (let [lang (:lang args)
             content (fs/read-all-bytes (get template-files :bb))]
         (if (nil? content)
           (println (str "Option '" lang "' not available. See help."))
@@ -172,31 +179,29 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 (defn notify
   "Displays the resulting output of the command as a desktop.... well... that
   won't work hahahahahaha. We need to do as follows:
 
   - if notifications are currently enabled, we say that and mention that we will
-    disable them
+  disable them
   - if notifications are disabled, we enable them and notify the user that they
-    were enabled
+  were enabled
 
   The command with possible options is:
 
   notify-send [options] {summary} body
 
   Options:
-    --urgency={low,normal,critical} 
-    --expire-time={millis}
-    --icon={filename,stock icon}
-    --category={type,type,...}      ;; optional, but not sure about it
-    --hint=type:name:value          ;; same as above
+  --urgency={low,normal,critical} 
+  --expire-time={millis}
+  --icon={filename,stock icon}
+  --category={type,type,...}      ;; optional, but not sure about it
+  --hint=type:name:value          ;; same as above
 
   More documentation here: https://galago-project.org/specs/notification/0.9/index.html"
   [text & {:keys [expire-time]
-                      :or {expire-time 3000}}]
+           :or {expire-time 3000}}]
   (sh "notify-send" (str "--expire-time=" expire-time) "Notification status" text))
 
 (defn toggle-notifications
@@ -229,8 +234,6 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 (defn create-file-from-template
   "Creates a file with `file-name` from the `template` in the current directory, if the file doesn't already exists. If it does, shows a message and aborts."
   [file-name template]
@@ -254,8 +257,6 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 (defn build
   "Creates a build.clj file in the current directory, to help running commands."
   []
@@ -268,20 +269,16 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 (defn fmt
   "Formats Clojure files using cljfmt."
   []
   (println 
     (apply sh (-> 
                 "clj -Tcljfmt %s" 
-                (format (if (:fix parsed-cli-args) "fix" "check"))
+                (format (if (:fix args) "fix" "check"))
                 (s/split #" ")))))
 
 
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 (defn numbered-projs []
   (let [projs (-> projects-dir
@@ -299,7 +296,7 @@
 (defn code
   "Opens VSCode with the given project."
   []
-  (let [proj (:proj parsed-cli-args)] 
+  (let [proj (:proj args)] 
     (if (or (nil? proj) (boolean? proj))
       (do
         (println "Choose one of the projects below, by name or number.")
@@ -313,23 +310,23 @@
 
 (comment
   ;; print all projects
-  (binding [parsed-cli-args {:proj nil}]
+  (binding [args {:proj nil}]
     (code))
 
   ;; open the first one
-  (binding [parsed-cli-args {:proj 0}]
+  (binding [args {:proj 0}]
     (code))
 
   ;; open some in the middle
-  (binding [parsed-cli-args {:proj 5}]
+  (binding [args {:proj 5}]
     (code))
 
   ;; open the last one
-  (binding [parsed-cli-args {:proj 27}]
+  (binding [args {:proj 27}]
     (code))
 
   ;; blow it up!
-  (binding [parsed-cli-args {:proj 28}]
+  (binding [args {:proj 28}]
     (code))
 
   ;; rcf - rich comment form
@@ -337,12 +334,10 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 (defn git-orphan
   "Creates a branch with no history in the current repo."
   []
-  (let [name (:name parsed-cli-args)] 
+  (let [name (:name args)] 
     (if (nil? name)
       (do
         (println "Please, provide the :name argument with a name for the new branch.")
@@ -350,8 +345,6 @@
       (:out (sh "git" "switch" "--orphan" name)))))
 
 
-;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
 ;; -----------------------------------------------------------------------------
 (defn nvmrc
   "Creates a .nvmrc file in the current dir."
@@ -361,7 +354,36 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; -----------------------------------------------------------------------------
+(defn n
+  "Creates a new project following one of the available templates."
+  []
+  (let [_ (js-package-mananger-note)
+        name (:name args)
+          usage (s/join 
+                  "\n- "
+                  (concat
+                    ["Please, provide the :name argument, choosing one of the following templates:"]
+                    templates-for-new-projects))
+          display-usage-and-exit (do (println usage)
+                                     (System/exit 1))]
+      (if (nil? name)
+        (do
+          (p name)
+          (display-usage-and-exit))
+        (let [options {"astro" "pnpm create astro@latest"
+                       "react" "echo 'not ready'"
+                       "deno" "echo 'not ready'"
+                       "bun" "echo 'not ready'"
+                       "clj" "echo 'not ready'"
+                       "cljs" "echo 'not ready'"}
+              selected-option (get options name nil)]
+          (if (nil? selected-option) 
+            (display-usage-and-exit) 
+            (let [cmd (s/split selected-option #" ")]
+              (println cmd)
+              (:out (sh cmd))))))))
+
+
 ;; -----------------------------------------------------------------------------
 ;; Next command here.
 
@@ -376,20 +398,21 @@
 
 (defn help []
   (println
-   (str "Choose one of the commands below: \n\n"
-        (s/join "\n"
-                (map #(format "%-25s%s" (:name %) (:doc %))
-                     [(meta #'free-ram)
-                      (meta #'pretty)
-                      (meta #'time-in)
-                      (meta #'bb)
-                      (meta #'toggle-notifications)
-                      (meta #'shadow)
-                      (meta #'fmt)
-                      (meta #'code)
-                      (meta #'git-orphan)
-                      (meta #'nvmrc)
-                      ])))))
+    (str "Choose one of the commands below: \n\n"
+         (s/join "\n"
+                 (map #(format "%-25s%s" (:name %) (:doc %))
+                      [(meta #'free-ram)
+                       (meta #'pretty)
+                       (meta #'time-in)
+                       (meta #'bb)
+                       (meta #'toggle-notifications)
+                       (meta #'shadow)
+                       (meta #'fmt)
+                       (meta #'code)
+                       (meta #'git-orphan)
+                       (meta #'nvmrc)
+                       (meta #'n)
+                       ])))))
 
 
 ;; Run the selected command.
@@ -414,20 +437,20 @@
 
   ;; creates one file for each of the templates
   (->
-   templates-dir
-   (io/file "bb.edn")
-   (fs/write-bytes (.getBytes "here goes the desired file content")))
+    templates-dir
+    (io/file "bb.edn")
+    (fs/write-bytes (.getBytes "here goes the desired file content")))
 
   (->
-   templates-dir
-   (io/file ".prettierrc.json")
-   (fs/write-bytes (.getBytes "here goes the desired file content")))
+    templates-dir
+    (io/file ".prettierrc.json")
+    (fs/write-bytes (.getBytes "here goes the desired file content")))
 
   ;; creates a dir for templates if it doesn't exists and/or returns its content
   (->
-   templates-dir
-   (fs/create-dirs)
-   (fs/list-dir))
+    templates-dir
+    (fs/create-dirs)
+    (fs/list-dir))
 
 
 
