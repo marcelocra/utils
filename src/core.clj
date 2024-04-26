@@ -359,29 +359,36 @@
   []
   (let [_ (js-package-mananger-note)
         name (:name args)
-          usage (s/join 
-                  "\n- "
-                  (concat
-                    ["Please, provide the :name argument, choosing one of the following templates:"]
-                    templates-for-new-projects))
-          display-usage-and-exit (do (println usage)
-                                     (System/exit 1))]
-      (if (nil? name)
-        (do
-          (p name)
-          (display-usage-and-exit))
-        (let [options {"astro" "pnpm create astro@latest"
-                       "react" "echo 'not ready'"
-                       "deno" "echo 'not ready'"
-                       "bun" "echo 'not ready'"
-                       "clj" "echo 'not ready'"
-                       "cljs" "echo 'not ready'"}
-              selected-option (get options name nil)]
-          (if (nil? selected-option) 
-            (display-usage-and-exit) 
-            (let [cmd (s/split selected-option #" ")]
-              (println cmd)
-              (:out (sh cmd))))))))
+        usage (s/join 
+                "\n- "
+                (concat
+                  ["Please, provide the :name argument, choosing one of the following templates:"]
+                  templates-for-new-projects))
+        display-usage-and-exit (do (println usage)
+                                   (System/exit 1))]
+    (if (nil? name)
+      (do
+        (p name)
+        (display-usage-and-exit))
+      (let [options {"astro" "pnpm create astro@latest"
+                     "react" "echo 'not ready'"
+                     "deno" "echo 'not ready'"
+                     "bun" "echo 'not ready'"
+                     "clj" "echo 'not ready'"
+                     "cljs" "echo 'not ready'"}
+            selected-option (get options name nil)]
+        (if (nil? selected-option) 
+          (display-usage-and-exit) 
+          (let [cmd (s/split selected-option #" ")]
+            (println cmd)
+            (:out (sh cmd))))))))
+
+
+;; -----------------------------------------------------------------------------
+(defn login-history
+  "Lists the login history, along with some other stuff like sudo calls. (For Ubuntu-based distros. Tested in Linux Mint.)"
+  []
+  (println "vim /var/log/auth.log"))
 
 
 ;; -----------------------------------------------------------------------------
@@ -412,6 +419,7 @@
                        (meta #'git-orphan)
                        (meta #'nvmrc)
                        (meta #'n)
+                       (meta #'login-history)
                        ])))))
 
 
