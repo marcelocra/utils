@@ -1,6 +1,6 @@
 {
   "name": "mcra-utils",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Be more productive by automating tasks and avoiding code rewrites.",
   "bin": {
     "mcra": "bin.js"
