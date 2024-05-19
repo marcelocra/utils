@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
-import { loadFile } from "nbb";
+import { addClassPath, loadFile } from "nbb";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
-const { main } = await loadFile("./src/dev/marcelocra/bin.cljs");
+const __dirname = fileURLToPath(dirname(import.meta.url));
 
-main();
+addClassPath(resolve(__dirname, "src"));
+
+await loadFile(resolve(__dirname, "src/dev/marcelocra/bin.cljs"));

@@ -1,0 +1,19 @@
+{
+  "name": "client-manager",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "app:dev": "shadow-cljs -d cider/cider-nrepl:0.28.5 watch :app",
+    "app:tw": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch"
+  },
+  "devDependencies": {
+    "daisyui": "^4.7.3",
+    "shadow-cljs": "^2.27.5",
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
