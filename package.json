@@ -13,6 +13,7 @@
   "author": "Marcelo Almeida",
   "license": "MIT",
   "dependencies": {
-    "nbb": "^2.2.188"
+    "nbb": "^1.2.188",
+    "shelljs": "^0.8.5"
   }
 }
