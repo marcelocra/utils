@@ -1,24 +1,19 @@
-# Utils - they really are!
+# Utils
 
-This is my atempt at a command line program where I can create all my program
-and code generators.
+> Be more productive by automating tasks and avoiding code rewrites.
 
-Right now this program requires `babashka` and the core script lives in
-`src/core.clj`.
+## Goal
 
-I'll be splitting that script in a number of modules, to improve code quality,
-but that file will probably always the the entry point.
+The goal is for this package to be both a command line program (cli) and a
+utility library.
 
-Right now it already generates some stuff, with defaults that I care about:
+**IMPORTANT:** Currently, 19may2024, we are not there yet!
 
-- `shadow-cljs.edn`
-- `.gitignore` for a shadow-cljs project
-- `.prettierrc.json`
-- `bb.edn`
+## TODO
 
-You can find the next stuff I'm planning on working on in the next section.
+### Now
 
-## Up next
+### Next
 
 - [ ] full `shadow-cljs` project, with Reagent, TailwindCSS and DaisyUI
       (Tailwind plugin)
@@ -27,3 +22,41 @@ You can find the next stuff I'm planning on working on in the next section.
       lsp). Would allow me to have the same snippet system in Neovim, Sublime,
       etc
 - [ ] migrate all `archive` code and script references to the snippet program
+
+---
+
+<details>
+<summary>Thinking about the installation, for later.</summary>
+
+## Install
+
+### cli
+
+To use this package as a task automation cli, running like an isolated binary,
+run:
+
+```sh
+pnpm add --global mcra-utils
+
+```
+
+I also alias it to `u`. If you like the alias, run
+
+```sh
+mcra-utils --create-alias
+```
+
+to add it both to `~/.bashrc` and `~/.zshrc`. Source those or reload your
+terminal to use the alias, as usual.
+
+### JavaScript utility library
+
+To use this package as a JavaScript utility library, add it to your project
+dependencies:
+
+```sh
+# In your project folder, run:
+pnpm add mcra-utils
+```
+
+</details>
