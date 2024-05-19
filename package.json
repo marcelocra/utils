@@ -1,0 +1,12 @@
+{
+  "name": "mcra-utils",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Be more productive by automating tasks and avoiding code rewrites.",
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Hello, World!'"
+  },
+  "author": "Marcelo Almeida",
+  "license": "MIT"
+}
