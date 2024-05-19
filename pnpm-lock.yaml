@@ -1,0 +1,30 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      nbb:
+        specifier: ^1.2.188
+        version: 1.2.188
+
+packages:
+
+  import-meta-resolve@2.2.2:
+    resolution: {integrity: sha512-f8KcQ1D80V7RnqVm+/lirO9zkOxjGxhaTC1IPrBGd3MEfNgmNG67tSUO9gTi2F3Blr2Az6g1vocaxzkVnWl9MA==}
+
+  nbb@1.2.188:
+    resolution: {integrity: sha512-g8UQQEKP8ubw8UaJxJtvUekJXozHlW3b6FoUfDiqG/imaUk6xr1X5L6fl2cNHI/xgM+B/Jxy4pjaxR4KxpbLCQ==}
+    hasBin: true
+
+snapshots:
+
+  import-meta-resolve@2.2.2: {}
+
+  nbb@1.2.188:
+    dependencies:
+      import-meta-resolve: 2.2.2
