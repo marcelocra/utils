@@ -1,5 +1,18 @@
 {
   "search.exclude": {
     "archives/": true
+  },
+
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+
+    "**/.clj-kondo": true,
+    "**/.lsp": true
+    // "**/archives": true
   }
 }
