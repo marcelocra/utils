@@ -1,5 +1,5 @@
 {
-  "name": "@marcelocra/utils",
+  "name": "mcra-utils",
   "version": "0.1.0",
   "description": "Be more productive by automating tasks and avoiding code rewrites.",
   "bin": {
