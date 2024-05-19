@@ -6,7 +6,7 @@
 # linguist-language=name     languages.yml         Highlighted and classified as name
 # linguist-vendored          vendor.yml            Excluded from stats
 
-archives/ linguist-vendored
+archives/** linguist-vendored
 
 # Git LFS
 # -------
