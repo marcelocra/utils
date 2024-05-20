@@ -9,11 +9,19 @@ utility library.
 
 **IMPORTANT:** Currently, 19may2024, we are not there yet!
 
-## TODO
+## to do now, per version
 
-### Now
+v0.1.3
 
-### Next
+- [ ] finish porting code from `core.clj` to cljs
+- [ ] rename `js` files to `mjs`, to make it more clear
+- [ ] create algorithm study section
+- [ ] add tests
+  - might be possible to add cljs tests in the same file as the code is,
+    importing it later in a test file so that the testing framework recognize it
+- [x] add `author` and `repository` fields in the `package.json` file
+
+## ideas
 
 - [ ] full `shadow-cljs` project, with Reagent, TailwindCSS and DaisyUI
       (Tailwind plugin)

@@ -1,6 +1,6 @@
 {
   "name": "mcra-utils",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Be more productive by automating tasks and avoiding code rewrites.",
   "bin": {
     "mcra": "bin.js"
@@ -10,7 +10,14 @@
   "scripts": {
     "dev": "echo 'Hello, World!'"
   },
-  "author": "Marcelo Almeida",
+  "author": {
+    "name": "Marcelo Almeida",
+    "email": "npm@marcelocra.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcelocra/utils"
+  },
   "license": "MIT",
   "dependencies": {
     "nbb": "^1.2.188",
