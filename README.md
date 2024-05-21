@@ -13,13 +13,17 @@ utility library.
 
 v0.1.3
 
+- [x] get `bin.mjs` and `lib.mjs` to work without cljs
+- [x] rename `js` files to `mjs`, to make it more clear
+- [x] add `author` and `repository` fields in the `package.json` file
+
+v0.1.4
+
 - [ ] finish porting code from `core.clj` to cljs
-- [ ] rename `js` files to `mjs`, to make it more clear
 - [ ] create algorithm study section
 - [ ] add tests
   - might be possible to add cljs tests in the same file as the code is,
     importing it later in a test file so that the testing framework recognize it
-- [x] add `author` and `repository` fields in the `package.json` file
 
 ## ideas
 
