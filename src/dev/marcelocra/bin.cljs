@@ -1,10 +1,12 @@
 (ns dev.marcelocra.bin
   (:require
-   [dev.marcelocra.core :as lib]
+   [dev.marcelocra.lib :as lib]
 
    ["node:fs" :as fs]
    ["node:path" :as path]
    ["shelljs$default" :as sh]))
+
+(println "Hello from bin.cljs. Now it is:" (.toLocaleString (js/Date.)))
 
 (def source-path (path/resolve "./src/dev/marcelocra"))
 (def templates-folder (path/resolve source-path "templates"))
