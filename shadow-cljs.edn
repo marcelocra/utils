@@ -14,12 +14,12 @@
  {:bin
   {:target :node-script
    :main dev.marcelocra.bin/main
-   :output-to "dist/bin.js"}
+   :output-to "dist/bin.mjs"}
 
  :lib
   {:target :node-library
    :exports-var dev.marcelocra.lib/exports
-   :output-to "dist/lib.js"}
+   :output-to "dist/lib.mjs"}
 
   ;; New targets above this line.
   }
