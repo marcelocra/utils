@@ -1,5 +1,6 @@
-import { zip } from "../zip.js";
-import "../types.js";
+import { zip } from "./zip.js";
+
+import "./types.js";
 
 /**
  *

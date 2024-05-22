@@ -11,13 +11,11 @@ utility library.
 
 ## to do now, per version
 
-v0.1.3
-
-- [x] get `bin.mjs` and `lib.mjs` to work without cljs
-- [x] rename `js` files to `mjs`, to make it more clear
-- [x] add `author` and `repository` fields in the `package.json` file
-
 v0.1.4
+
+- [ ] review how to use all main data structures in js
+
+later
 
 - [ ] finish porting code from `core.clj` to cljs
 - [ ] create algorithm study section
@@ -37,6 +35,14 @@ v0.1.4
 - [ ] download all nerdfonts listed in vscode settings directly from their site
 - [ ] write a script to capture all functionality here and create an "api"
       section in this readme
+
+## done
+
+v0.1.3
+
+- [x] get `bin.mjs` and `lib.mjs` to work without cljs
+- [x] rename `js` files to `mjs`, to make it more clear
+- [x] add `author` and `repository` fields in the `package.json` file
 
 ---
 
