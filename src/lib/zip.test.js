@@ -1,8 +1,10 @@
-import { expect, test } from "@jest/globals";
-import { zip } from "./zip";
+import { test } from "node:test";
+import { strict as assert } from "node:assert";
+
+import { zip } from "./zip.js";
 
 test("merge two arrays into an array of pairs", () => {
-  expect(zip(["a", "b", "c"], [1, 2, 3])).toBe([
+  assert.deepEqual(zip(["a", "b", "c"], [1, 2, 3]), [
     ["a", 1],
     ["b", 2],
     ["c", 3],

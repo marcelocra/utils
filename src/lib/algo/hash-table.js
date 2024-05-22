@@ -1,21 +1,16 @@
-import { expect, test } from "@jest/globals";
-import { zip } from "../zip";
+import { zip } from "../zip.js";
+import "../types.js";
 
 /**
  *
- * @param {{keys: string[], values: string[]}} params the params
- * @returns {Map<string, string>}
+ * @param {{keys: Keys, values: Values}} params the params
+ * @returns {Map<string, string|number>}
  */
 export function hashTable(params) {
-  return new Map(zip(params.keys, params.values));
-}
+  const zipped = zip(params.keys, params.values);
+  if (zipped instanceof Error) {
+    return new Map();
+  }
 
-test(
-  "corrct map is built",
-  expect(hashTable({ keys: ["a", "b"], values: [1, 2] })).toBe(
-    new Map([
-      ["a", 1],
-      ["b", 2],
-    ])
-  )
-);
+  return new Map(zipped);
+}

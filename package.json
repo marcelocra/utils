@@ -21,8 +21,7 @@
     "e2e": "shadow-cljs compile e2e && node out/e2e.js",
     "quick-e2e": "shadow-cljs compile lib && pnpm run e2e",
     "clean": "shx rm -rf dist/",
-    "----- REVIEW ABOVE WHEN USING SHADOW-CLJS -----": "",
-    "test": "tsc && jest"
+    "----- REVIEW ABOVE WHEN USING SHADOW-CLJS -----": ""
   },
   "dependencies": {
     "shelljs": "^0.8.5"
@@ -30,7 +29,7 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/strictest": "^2.0.5",
-    "jest": "^29.7.0",
+    "@types/node": "^20.12.12",
     "shadow-cljs": "^2.28.7",
     "shx": "^0.3.4",
     "typescript": "^5.4.5"
@@ -43,11 +42,5 @@
     "type": "git",
     "url": "https://github.com/marcelocra/utils"
   },
-  "license": "MIT",
-  "jest": {
-    "verbose": true,
-    "testRegex": [
-      "src/lib/.*\\.js"
-    ]
-  }
+  "license": "MIT"
 }

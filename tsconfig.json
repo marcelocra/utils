@@ -1,3 +1,7 @@
-{ "extends": "@tsconfig/strictest/tsconfig.json",
-""
- }
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+
+  "include": ["src/lib/**/*.js"],
+
+  "compilerOptions": { "allowJs": true, "rootDir": ".", "outDir": "dist/lib" }
+}
