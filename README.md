@@ -34,6 +34,9 @@ v0.1.4
       lsp). Would allow me to have the same snippet system in Neovim, Sublime,
       etc
 - [ ] migrate all `archive` code and script references to the snippet program
+- [ ] download all nerdfonts listed in vscode settings directly from their site
+- [ ] write a script to capture all functionality here and create an "api"
+      section in this readme
 
 ---
 
