@@ -28,7 +28,9 @@
 ;; TODO: add more options and allow choosing from cmd line.
 (def theme-mapper
   {:github-dark-dimmed-to-solarized-light
-   {:dark "\"GitHub Dark Dimmed\""
+   ; {:dark "\"GitHub Dark Dimmed\""
+   ; {:dark "\"GitHub Dark Default\""
+   {:dark "\"Solarized Dark\""
     :light "\"Solarized Light\""}})
 
 (defn get-theme [theme]
