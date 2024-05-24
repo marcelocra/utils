@@ -13,10 +13,13 @@ utility library.
 
 v0.1.4
 
-- [ ] review how to use all main data structures in js
+- need to prioritize what comes next
 
 later
 
+- [ ] display notification status at the system tray
+- [ ] simplify adding to-do's for each project
+- [ ] cli to avoid running possibly dangerous commands, like npx or bunx
 - [ ] finish porting code from `core.clj` to cljs
 - [ ] create algorithm study section
 - [ ] add tests
