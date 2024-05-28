@@ -159,3 +159,57 @@
   ;; rcf - rich comment form
   )
 
+
+;; Consider create categories one day, to group settings that should be changed
+;; together, like colors, fonts, etc.
+;;
+;; The code below is a draft of how it could be done.
+(comment
+  (def options-as-map
+    "Gets all settings that have options in an edn comment.
+  
+   For the comment to be parsed, it must be formatted like below:
+   
+   // edn{...}
+
+   NOTE: the space between `//` and `edn{...}` matters.
+   
+   TODO: Returns a map in the form:
+
+   {:category :themes
+    :key \"editor.lineHightlightBorder\"
+    :current-value \"#00ffff22\"
+    :options {:light \"#00ff00\" :dark \"#ff0000\"}}
+   "
+    (reduce
+     #(assoc
+       %1
+       #_(read-string (format ":category "))
+       (read-string (format "\"%s\"" (get %2 1)))
+       (read-string (format "{:current %s :options %s}" (get %2 2) (get %2 3))))
+     {}
+   ;; First capture: the setting key, e.g. "editor.fontSize".
+   ;; Second capture: the setting value, e.g. 15 (it respects the types).
+   ;; Third capture: the settings options from the edn data in a comment.
+     (re-seq #".*\"(.*)\": (.*),.*// edn(\{.*\})" settings-content)))
+
+  (def light-themes
+    {:options ["Quiet Light"
+               "Solarized Light"]
+     :preferred "Solarized Light"})
+
+  (def dark-themes
+    {:options ["Abyss"
+               "Default Dark+"
+               "GitHub Dark"
+               "GitHub Dark Default"
+               "GitHub Dark Dimmed"
+               "Monokai"
+               "Monokai Dimmed"
+               "Solarized Dark"]
+     :preferred "Solarized Dark"})
+
+  (defn find-current-theme []
+    (second (re-find #".*\"workbench\.colorTheme\": \"(.*)\".*" settings-content)))
+
+  :rcf)
