@@ -40,10 +40,8 @@
   (let [current (:abyss theme-mapper)]
     [(:light current) (:dark current)]))
 
-(get-theme)
-
 (defn update-colors [settings-content]
-  (let [matches (re-seq #"(.*)//(\{:dark.*)" settings-content)]
+  (let [matches (re-seq #"(.*)// edn(\{:dark.*\}).*" settings-content)]
     (loop [not-processed matches
            current-content settings-content
            abort-counter 1]
@@ -66,15 +64,22 @@
                  (inc abort-counter)))))))
 
 (defn from-theme-to-theme [from to]
-  (do
-    (println
-     (format "from '%s' to '%s'" from to))
-    (spit settings-path
-          (s/replace
-           (update-colors settings-content)
-           (re-pattern from)
-           to))))
+  (println
+   (format "from '%s' to '%s'" from to))
+  (spit settings-path
+        (s/replace
+         (update-colors settings-content)
+         (re-pattern from)
+         to)))
 
+(comment
+  (let [[light-theme _] (get-theme)
+        light-theme-str-in-settings? (re-find (re-pattern (str "colorTheme.*" light-theme)) settings-content)
+        ;; light-theme-str-in-settings? (not (nil? (re-find (re-pattern (str "colorTheme.*" light-theme)))))
+        ]
+    light-theme-str-in-settings?)
+
+  :rcf)
 
 (defn toggle
   "If light mode is enabled, toggle dark mode (and vice-versa)."
