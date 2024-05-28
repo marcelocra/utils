@@ -27,16 +27,20 @@
 
 ;; TODO: add more options and allow choosing from cmd line.
 (def theme-mapper
-  {:github-dark-dimmed-to-solarized-light
-   ; {:dark "\"GitHub Dark Dimmed\""
-   ; {:dark "\"GitHub Dark Default\""
-   {:dark "\"Solarized Dark\""
-    :light "\"Solarized Light\""}})
+  {:dimmed {:dark "\"GitHub Dark Dimmed\""
+            :light "\"Solarized Light\""}
+   :abyss {:dark "\"Abyss\""
+           :light "\"Quiet Light\""}
+   :github-dark-default {:dark "\"GitHub Dark Default\""
+                         :light "\"Solarized Light\""}
+   :solarized {:dark "\"Solarized Dark\""
+               :light "\"Solarized Light\""}})
 
-(defn get-theme [theme]
-  (let [current (-> theme-mapper
-                    theme)]
+(defn get-theme []
+  (let [current (:abyss theme-mapper)]
     [(:light current) (:dark current)]))
+
+(get-theme)
 
 (defn update-colors [settings-content]
   (let [matches (re-seq #"(.*)//(\{:dark.*)" settings-content)]
@@ -75,7 +79,7 @@
 (defn toggle
   "If light mode is enabled, toggle dark mode (and vice-versa)."
   []
-  (let [[light-theme dark-theme] (get-theme :github-dark-dimmed-to-solarized-light)
+  (let [[light-theme dark-theme] (get-theme)
         light-theme-str-in-settings? (not (nil? (re-find (re-pattern (str "colorTheme.*" light-theme)) settings-content)))]
     (if light-theme-str-in-settings?
       (from-theme-to-theme light-theme dark-theme)
