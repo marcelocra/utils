@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import { strict as assert } from "node:assert";
-import { hashTable } from "./hash-table.js";
+
+import { hashTable } from "./hash-table.ts";
 
 test("the correct map is built", () => {
   assert.deepEqual(
@@ -8,6 +9,6 @@ test("the correct map is built", () => {
     new Map([
       ["a", 1],
       ["b", 2],
-    ])
+    ]),
   );
 });

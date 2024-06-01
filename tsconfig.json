@@ -1,7 +1,17 @@
 {
   "extends": "@tsconfig/strictest/tsconfig.json",
 
-  "include": ["src/lib/**/*.js"],
+  "compilerOptions": {
+    "target": "ESNext",
 
-  "compilerOptions": { "allowJs": true, "rootDir": ".", "outDir": "dist/lib" }
+    "allowJs": true,
+
+    "rootDir": ".",
+    "outDir": "dist/lib",
+
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+
+  "include": ["src/lib/**/*.js", "src/lib/**/*.ts"]
 }
