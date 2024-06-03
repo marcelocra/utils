@@ -1,7 +1,10 @@
 (ns dev.marcelocra.core
   (:require
-   ["bun" :refer [$]]))
+   ["node:fs" :as fs]))
 
 (set! *warn-on-infer* true)
 
-($ "echo hellow")
+(defn something []
+  (fs/readdirSync "."))
+
+#js {:something something}

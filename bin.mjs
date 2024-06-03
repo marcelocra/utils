@@ -1,3 +1,5 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
-console.log("hello world");
+import { something } from "./src/cljs.mjs";
+
+console.log(something());
