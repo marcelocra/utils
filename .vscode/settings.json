@@ -12,6 +12,9 @@
     "**/Thumbs.db": true,
 
     "**/.clj-kondo": true,
+    "**/.calva": true,
+    "**/.cpcache": true,
+    "**/.shadow-cljs": true,
     "**/.lsp": true
     // "**/archives": true
   }
