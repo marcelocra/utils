@@ -27,13 +27,13 @@
     "nbb": "nbb core.cljs"
   },
   "dependencies": {
+    "nbb": "^1.2.188",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^20.12.12",
-    "nbb": "^1.2.188",
     "shadow-cljs": "^2.28.7",
     "shx": "^0.3.4",
     "typescript": "^5.4.5"

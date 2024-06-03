@@ -6,9 +6,13 @@
 
 (set! *warn-on-infer* true)
 
-(fs/readdirSync
- (path/resolve (-> (shell/pwd) (.toString))
-               "templates"))
+(comment
+  ;; works!
+  (fs/readdirSync
+   (path/resolve (-> (shell/pwd) (.toString))
+                 "templates"))
+
+  :rcf)
 
 (defn something []
   (fs/readdirSync "."))

@@ -19,8 +19,9 @@ later
 
 - [ ] display notification status at the system tray
 - [ ] simplify adding to-do's for each project
-- [ ] cli to avoid running possibly dangerous commands, like npx or bunx
-- [ ] finish porting code from `core.clj` to cljs
+- [ ] create a cli to avoid running possibly dangerous commands, like npx or
+      bunx
+- [ ] port code from `core.clj` to cljs
 - [ ] create algorithm study section
 - [ ] add tests
   - might be possible to add cljs tests in the same file as the code is,
