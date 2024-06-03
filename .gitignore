@@ -28,3 +28,4 @@ pom.xml.asc
 
 .env
 
+out/

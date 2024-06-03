@@ -1,0 +1,5 @@
+{:main dev.marcelocra.core
+ :output-to "dist/cljs/core.js"
+ :output-dir "dist/cljs"
+ :optimizations :none
+ :infer-externs true}
