@@ -8,6 +8,9 @@
 
 archives/** linguist-vendored
 dist/** linguist-generated
+**/templates/** linguist-vendored
+
+src/shadow_reagent_tailwind_daisyui/** linguist-vendored
 
 # Git LFS
 # -------
