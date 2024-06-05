@@ -1,10 +1,10 @@
 {
   "name": "mcra-utils",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Be more productive by automating tasks and avoiding code rewrites.",
   "type": "module",
-  "bin": "bin.mjs",
-  "main": "lib.mjs",
+  "bin": "bin.js",
+  "main": "lib.js",
   "scripts": {
     "---------------------------- SHADOW-CLJS ----------------------------": "",
     "NOTE": "Still now working with cljs. Later try with the `dist` output, using bin.mjs and lib.mjs there.",
@@ -24,16 +24,19 @@
     "test": "deno test src/lib",
     "test:watch": "deno test --watch src/lib",
     "-------------------------------- BUN --------------------------------": "",
-    "nbb": "nbb core.cljs"
+    "nbb": "nbb src/dev/marcelocra/core.cljs"
   },
   "dependencies": {
+    "ink": "^5.0.1",
     "nbb": "^1.2.188",
+    "react": "^18.3.1",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^20.12.12",
+    "@types/shelljs": "^0.8.15",
     "shadow-cljs": "^2.28.7",
     "shx": "^0.3.4",
     "typescript": "^5.4.5"

@@ -11,7 +11,7 @@ utility library.
 
 ## to do now, per version
 
-v0.1.4
+v0.1.5
 
 - need to prioritize what comes next
 
@@ -41,6 +41,11 @@ later
       section in this readme
 
 ## done
+
+v0.1.4
+
+- get bin.js to work only with js and make it similar to core.clj, to compare
+  both languages
 
 v0.1.3
 
