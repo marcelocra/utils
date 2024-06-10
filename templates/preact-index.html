@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Template</title>
     <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+
     <script type="importmap">
       {
         "imports": {
@@ -32,8 +36,7 @@
         `;
       }
 
-      render(html`<${App} />`, document.body);
+      render(html`<${App} />`, document.getElementById('app'));
     </script>
-  </head>
-  <body></body>
+  </body>
 </html>
