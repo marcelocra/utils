@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Template</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "preact": "https://esm.sh/preact@10.19.2",
+          "preact/": "https://esm.sh/preact@10.19.2/",
+          "htm/preact": "https://esm.sh/htm@3.1.1/preact?external=preact"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import { render } from "preact";
+      import { useReducer } from "preact/hooks";
+      import { html } from "htm/preact";
+
+      export function App() {
+        const [count, add] = useReducer((a, b) => a + b, 0);
+
+        return html`
+          <div class="flex flex-row gap-3 min-h-screen w-1/2 mx-auto items-center justify-center">
+            <button onClick=${() => add(-1)}>Decrement</button>
+            <input class="text-center border border-gray" readonly size="4" value=${count} />
+            <button onClick=${() => add(1)}>Increment</button>
+          </div>
+        `;
+      }
+
+      render(html`<${App} />`, document.body);
+    </script>
+  </head>
+  <body></body>
+</html>
