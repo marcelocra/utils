@@ -37,9 +37,30 @@
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^20.12.12",
     "@types/shelljs": "^0.8.15",
+    "eslint": "^9.4.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-preact": "^1.4.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.1",
+    "prettier-plugin-tailwindcss": "^0.6.2",
     "shadow-cljs": "^2.28.7",
     "shx": "^0.3.4",
     "typescript": "^5.4.5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "google",
+      "preact"
+    ],
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
   },
   "author": {
     "name": "Marcelo Almeida",
