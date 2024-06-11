@@ -55,15 +55,13 @@ v0.1.3
 
 ---
 
-<!-- #region -->
-<details>
-<summary>Thinking about the installation, for later.</summary>
+<!-- #region Thinking about the installation, for later. -->
 
-<h2>Install</h2>
+## Install
 
 Eventually, should work like this.
 
-<h3>cli</h3>
+### cli
 
 To use this package as a task automation cli, running like an isolated binary,
 run:
@@ -82,7 +80,7 @@ mcra-utils --create-alias
 to add it both to `~/.bashrc` and `~/.zshrc`. Source those or reload your
 terminal to use the alias, as usual.
 
-<h3>JavaScript utility library</h3>
+### JavaScript utility library
 
 To use this package as a JavaScript utility library, add it to your project
 dependencies:
@@ -92,7 +90,6 @@ dependencies:
 pnpm add mcra-utils
 ```
 
-</details>
 <!-- #endregion -->
 
 ## Templates
@@ -197,3 +194,5 @@ The ESLint order should have the highest priorities later, so they are applied o
   },
 }
 ```
+
+## Tools
