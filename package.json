@@ -30,12 +30,13 @@
     "ink": "^5.0.1",
     "nbb": "^1.2.188",
     "react": "^18.3.1",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "zx": "^8.1.2"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^20.12.12",
+    "@types/node": "^20.14.2",
     "@types/shelljs": "^0.8.15",
     "eslint": "^9.4.0",
     "eslint-config-google": "^0.14.0",
@@ -45,7 +46,8 @@
     "prettier-plugin-tailwindcss": "^0.6.2",
     "shadow-cljs": "^2.28.7",
     "shx": "^0.3.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "@types/bun": "latest"
   },
   "eslintConfig": {
     "extends": [
