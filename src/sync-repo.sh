@@ -14,32 +14,23 @@ log() {
     echo "$1" >> $logfile_path
 }
 
-log "-------------------- $(date +%F_%T | tr ':' '-') --------------------"
+logline() {
+    log '---------------------------------------------------------------------'
+}
+
+log ''
+log "------------------------ $(date +%F_%T | tr ':' '-') ------------------------"
 
 if [ -z "$1" ]; then
     log 'Please, provide the path to a local git repository.'
-    log '---------------------------------------------------------------------'
+    logline
     exit 1
 fi
 
-if [ -d "$1" ]; then
+if [ ! -d "$1" ]; then
     log "'$1' is not a directory. Please, provide a local valid one."
-    log '---------------------------------------------------------------------'
+    logline
     exit 1
-fi
-
-# Go to the folder and log it.
-cd "$1"
-log "Running in '$1'"
-
-# Get git status.
-curr_state="$(git status --porcelain)"
-
-# Check if the status is empty and exit if so, as there's
-# nothing to do.
-if [ -z "$curr_state" ]; then
-    log 'Clean repo, nothing to do.'
-    exit 0
 fi
 
 run_or_exit() {
@@ -47,8 +38,28 @@ run_or_exit() {
         exit 1
     fi
 }
-    
-run_or_exit "git add -A >>$logfile_path 2>&1"
-run_or_exit "git commit -m 'update' >>$logfile_path 2>&1"
-run_or_exit "git push >>$logfile_path 2>&1h"
+
+main() {
+    # Get git status.
+    curr_state="$(git status --porcelain)"
+
+    # Check if the status is empty and exit if so, as there's
+    # nothing to do.
+    if [ -z "$curr_state" ]; then
+        log 'Clean repo, nothing to do.'
+        exit 0
+    fi
+
+    # run_or_exit "git add -A >> $logfile_path 2>&1"
+    #run_or_exit "git commit -m 'update' >>$logfile_path 2>&1"
+    #run_or_exit "git push >>$logfile_path 2>&1h"
+}
+
+# Go to the folder and log it.
+cd "$1"
+log "Running in '$1'"
+
+main
+
+logline
 
