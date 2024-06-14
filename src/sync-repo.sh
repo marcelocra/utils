@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 #
-# This is a long running script to be used in a cron job,
-# so stderr and stdout will be sent to a log file.
+# Long running script to be used as a cron job.
 
+# stderr and stdout will be sent to a log file.
 logfile_path="${HOME}/.sync-repo.log.txt"
 
 # Create the log file if it doesn't exist.
