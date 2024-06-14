@@ -17,5 +17,8 @@
     "**/.shadow-cljs": true,
     "**/.lsp": true
     // "**/archives": true
-  }
+  },
+
+  "deno.enable": true,
+  "deno.enablePaths": ["src/sync-repo.ipynb"]
 }
