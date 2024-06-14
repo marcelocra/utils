@@ -3,14 +3,13 @@
 
   "compilerOptions": {
     "target": "ESNext",
+    "module": "NodeNext",
 
     "allowJs": true,
 
     "rootDir": ".",
     "outDir": "dist/lib",
-
-    "noEmit": true,
-    "allowImportingTsExtensions": true
+    "noEmit": true
   },
 
   "include": ["src/lib/**/*.js", "src/lib/**/*.ts"]

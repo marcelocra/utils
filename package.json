@@ -21,8 +21,8 @@
     "quick-e2e": "shadow-cljs compile lib && pnpm run e2e",
     "clean": "shx rm -rf dist/",
     "------------------------------- DENO -------------------------------": "",
-    "test": "deno test src/lib",
-    "test:watch": "deno test --watch src/lib",
+    "test": "bun test bin.test.ts",
+    "test-w": "bun test --watch ./bin.ts",
     "-------------------------------- BUN --------------------------------": "",
     "nbb": "nbb src/dev/marcelocra/core.cljs"
   },
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/strictest": "^2.0.5",
+    "@types/bun": "latest",
     "@types/node": "^20.14.2",
     "@types/shelljs": "^0.8.15",
     "eslint": "^9.4.0",
@@ -46,8 +47,7 @@
     "prettier-plugin-tailwindcss": "^0.6.2",
     "shadow-cljs": "^2.28.7",
     "shx": "^0.3.4",
-    "typescript": "^5.4.5",
-    "@types/bun": "latest"
+    "typescript": "^5.4.5"
   },
   "eslintConfig": {
     "extends": [
