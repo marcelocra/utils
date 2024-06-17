@@ -10,13 +10,14 @@
 
 (def ^:dynamic *debug* "Prevents stuff from actually happening during development." true)
 
-(def logfile-path (-> js/process.env
-                      (.-HOME)
-                      (path/resolve ".sync-repo.log.txt")))
+(def home-path (-> js/process.env
+                   (.-HOME)))
+
+(def logfile-path (path/resolve home-path ".sync-repo.log.txt"))
 
 (defn log [text-to-log]
   (if *debug*
-    text-to-log
+    (do (println text-to-log) text-to-log)
     (fs/writeFileSync logfile-path text-to-log)))
 
 (defn create-logfile
@@ -24,10 +25,12 @@
   []
   (if (not (fs/existsSync logfile-path))
     (do
-      (log "logfile doesn't exist. creating...")
+      (log "Log file doesn't exist. Creating...")
       (fs/writeFileSync logfile-path)
       (log "done!"))
-    nil))
+    (do
+      (log "Log file exists, nothing to do.")
+      nil)))
 
 (defn dump-log
   "Dumps the whole content of the logfile as it currently is."
@@ -44,8 +47,6 @@
    "
   [^js/number number]
   (.padStart (str number) 2 "0"))
-
-
 
 (defn date-format
   "Creates a string from a Date object, formatted as 'yyyy-MM-DD_HH-MM-SS'."
@@ -79,13 +80,24 @@
 
 (def cli-spec
   {:spec
-   {:num {:coerce :long
-          :desc "Number of some items"
-          :alias :n                     ; adds -n alias for --num
-          :validate pos?                ; tests if supplied --num >0
-          :require true}                ; --num,-n is required
-    :flag {:coerce :boolean             ; defines a boolean flag
-           :desc "I am just a flag"}}
+   {:help {:coerce :boolean
+           :desc "Show this message"
+           :alias :h
+           :default false}
+    :dir {:coerce :string
+          :desc "Path to local git repository"
+          :validate
+          {:pred #(.startsWith % home-path)
+           :ex-msg
+           (fn [m]
+             (gstring/format
+              "Invalid dir path: '%s'. Must start with '%s'" (:value m) home-path))}
+          :require true}
+    :debug {:coerce :boolean
+            :desc "I am just a flag"
+            :alias :d
+            :default true}}
+
    :error-fn                           ; a function to handle errors
    (fn [{:keys [spec type cause msg option] :as data}]
      (if (= :org.babashka/cli type)
@@ -93,22 +105,42 @@
          :require
          (println
           (gstring/format "Missing required argument: %s\n" option))
+
          :validate
          (println
-          (gstring/format "%s does not exist!\n" msg)))))})
+          (gstring/format "%s\n" msg)))
+       nil))})
 
 (defn show-help
   [spec]
   (cli/format-opts (merge spec {:order (vec (keys (:spec spec)))})))
 
+(defn -run
+  "Runs the script."
+  [opts]
+  (binding [*debug* (or (:debug opts) (:d opts))]
+    (log (str "command line args: " opts))
+
+    (create-logfile)
+
+    (log "\n")
+    (log (now))
+
+    ;; Do not wrap these parens.
+    ))
+
 (defn -main [args]
   (let [opts (cli/parse-opts args cli-spec)]
     (if (or (:help opts) (:h opts))
       (println (show-help cli-spec))
-      (println "your args: " opts)))
-  (binding [*debug* true]
-    (create-logfile)
-    (log "\n")
-    (log (now))))
+      (-run opts))))
 
 (-main *command-line-args*)
+
+
+;; playground!
+(comment
+
+  (dump-log)
+
+  #_("do not wrap me!"))
