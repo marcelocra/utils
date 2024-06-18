@@ -1,0 +1,65 @@
+{
+  "name": "package.json template",
+  "version": "0.1.0", // Version for the initial release.
+  "private": true, // Private package by default.
+  "license": "UNLICENSED", // Private license.
+  "type": "module", // Use ES modules by default.
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^9.4.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-preact": "^1.4.0", // Remove if using React.
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2", // Remove if using Preact.
+    "eslint-plugin-react-hooks": "^4.6.0", // Remove if using Preact.
+    "eslint-plugin-react-refresh": "^0.4.5", // Remove if using Preact.
+    "prettier": "^3.3.1",
+    "prettier-plugin-tailwindcss": "^0.6.2",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.2.2",
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "google",
+      "preact", // Remove if using React.
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react-hooks/recommended", // Remove if using Preact.
+    ],
+    "plugins": [
+      "react-refresh", // Remove if using Preact.
+      "prettier",
+    ],
+    "ignorePatterns": ["node_modules", "dist", ".astro", ".vscode"],
+    "parser": "@typescript-eslint/parser",
+    "rules": {
+      "react-refresh/only-export-components": [
+        "warn",
+        {
+          "allowConstantExport": true,
+        },
+      ],
+    },
+  },
+  "prettier": {
+    "endOfLine": "lf",
+    "overrides": [
+      {
+        "files": "*.md",
+        "options": {
+          "printWidth": 80,
+          "tabWidth": 4,
+          "proseWrap": "always",
+          "parser": "markdown",
+        },
+      },
+    ],
+    "plugins": ["prettier-plugin-tailwindcss"],
+  },
+  "engines": {
+    "node": ">=20",
+  },
+  "engineStrict": true,
+  "packageManager": "bun@1.1.12",
+}
