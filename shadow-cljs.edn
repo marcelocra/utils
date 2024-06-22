@@ -17,7 +17,7 @@
   :lib
   {:target :node-library
    :exports-var dev.marcelocra.lib/exports
-   :output-to "compiled/lib/cljs-lib.js"}
+   :output-to "compiled/cljs-lib.js"}
 
   ;; New targets above this line.
   }}
