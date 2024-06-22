@@ -17,8 +17,7 @@
     "test": "shadow-cljs compile test && node out/test.js",
     "e2e": "shadow-cljs compile e2e && node out/e2e.js",
     "quick-e2e": "shadow-cljs compile lib && pnpm run e2e",
-    "clean": "shx rm -rf ./compiled/",
-    "nbb": "nbb src/dev/marcelocra/core.cljs"
+    "clean": "shx rm -rf ./compiled/"
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
