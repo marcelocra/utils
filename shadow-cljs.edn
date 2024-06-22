@@ -1,29 +1,22 @@
-;; shadow-cljs configuration. For details, see:
-;; https://shadow-cljs.github.io/docs/UsersGuide.html
-
 {:source-paths
- ["src"]
+ ["src/dev/marcelocra"]
 
  :dependencies
  []
 
  :dev-http
- {8080 "public"}
+ {8080 "src/cljs/shadow/public/"}
 
  :builds
  {:bin
-  {:target :node-script
-   :main dev.marcelocra.bin/main
-   :output-to "dist/bin.mjs"}
+  {:target :esm
+   :modules {:bin {:exports {bin dev.marcelocra.bin/main}}}
+   :output-dir "compiled/bin/"}
 
- :lib
+  :lib
   {:target :node-library
    :exports-var dev.marcelocra.lib/exports
-   :output-to "dist/lib.mjs"}
+   :output-to "compiled/cljs-lib.js"}
 
   ;; New targets above this line.
-  }
-
- ;; This might be necessary to use pnpm, which symlink packages in node_modules.
- :js-options {:allow-nested-packages false}
- }
+  }}

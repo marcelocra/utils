@@ -17,4 +17,5 @@
 (defn something []
   (fs/readdirSync "."))
 
-#js {:something something}
+#js {:something something
+     :something-else something}

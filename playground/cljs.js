@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
 
-import { something } from "./src/cljs.mjs";
+import { something } from "./nbb.js";
 
 console.log(something());

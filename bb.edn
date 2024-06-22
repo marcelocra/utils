@@ -1,1 +1,4 @@
-{:paths ["./src/dev/marcelocra"]}
+;; Only keeping this as it might be useful to play with bb or nbb. But if I keep
+;; using shadow-cljs, this won't be necessary.
+{:paths
+ ["src/cljs"]}
