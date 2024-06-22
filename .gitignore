@@ -29,3 +29,5 @@ pom.xml.asc
 .env
 
 out/
+
+.fake

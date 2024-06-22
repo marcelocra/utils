@@ -37,7 +37,7 @@
                :light "\"Solarized Light\""}})
 
 (defn get-theme []
-  (let [current (:abyss theme-mapper)]
+  (let [current (:dimmed theme-mapper)]
     [(:light current) (:dark current)]))
 
 (defn update-colors [settings-content]
