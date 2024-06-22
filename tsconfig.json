@@ -19,7 +19,7 @@
     "noEmit": true,
 
     "rootDir": ".",
-    "outDir": "dist/lib",
+    "outDir": "compiled/lib",
 
     // Best practices.
     "strict": true,

@@ -1,5 +1,5 @@
 {:source-paths
- ["src/dev/marcelocra"]
+ ["src/cljs"]
 
  :dependencies
  []
@@ -9,14 +9,15 @@
 
  :builds
  {:bin
-  {:target :esm
-   :modules {:bin {:exports {bin dev.marcelocra.bin/main}}}
-   :output-dir "compiled/bin/"}
+  {:target :node-script
+   :main dev.marcelocra.bin/main
+   :output-to "compiled/bin.cjs"
+   :compiler-options {:optimizations :advanced}}
 
   :lib
   {:target :node-library
    :exports-var dev.marcelocra.lib/exports
-   :output-to "compiled/cljs-lib.js"}
+   :output-to "compiled/lib/cljs-lib.js"}
 
   ;; New targets above this line.
   }}
