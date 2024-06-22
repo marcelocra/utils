@@ -1,4 +1,4 @@
-import { Keys, Values, ZipReturn } from "./types.ts";
+import type { Keys, Values, ZipReturn } from "./types.ts";
 
 /**
  * @param keys The value of the keys.
