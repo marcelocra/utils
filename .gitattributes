@@ -13,6 +13,7 @@ archives/** linguist-vendored
 dist/** linguist-generated
 out/** linguist-generated
 compiled/** linguist-generated
+examples/** linguist-generated
 
 # Templates are used as a copy/paste reference.
 **/templates/** linguist-vendored
