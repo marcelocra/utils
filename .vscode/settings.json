@@ -17,5 +17,9 @@
     "**/.shadow-cljs": true,
     "**/.lsp": true
     // "**/archives": true
-  }
+  },
+
+  "deno.enable": true,
+  "notebook.defaultFormatter": "denoland.vscode-deno",
+  "notebook.formatOnSave.enabled": true
 }

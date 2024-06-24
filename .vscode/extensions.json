@@ -1,3 +1,9 @@
 {
-  "recommendations": ["betterthantomorrow.calva", "esbenp.prettier-vscode", "dbaeumer.vscode-eslint"]
+  "recommendations": [
+    "betterthantomorrow.calva",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-toolsai.jupyter",
+    "denoland.vscode-deno"
+  ]
 }

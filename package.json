@@ -6,7 +6,6 @@
   "bin": "bin.js",
   "main": "lib.js",
   "scripts": {
-    "---------------------------- SHADOW-CLJS ----------------------------": "",
     "server": "shadow-cljs stop && shadow-cljs start",
     "server:stop": "shadow-cljs stop",
     "dev-bin": "shadow-cljs watch bin",
