@@ -5,8 +5,7 @@
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
   "singleAttributePerLine": false,
-  "bracketSameLine": false,
-  "jsxBracketSameLine": false,
+  "bracketSameLine": true,
   "jsxSingleQuote": false,
   "printWidth": 120,
   "proseWrap": "preserve",
@@ -19,6 +18,7 @@
   "useTabs": false,
   "embeddedLanguageFormatting": "auto",
   "vueIndentScriptAndStyle": false,
+  "astroAllowShorthand": true,
   "overrides": [
     {
       "files": "*.md",
