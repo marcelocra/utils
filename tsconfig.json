@@ -1,6 +1,4 @@
 {
-  "extends": "@tsconfig/strictest/tsconfig.json",
-
   "compilerOptions": {
     // Enable latest features.
     "lib": ["ESNext"],
