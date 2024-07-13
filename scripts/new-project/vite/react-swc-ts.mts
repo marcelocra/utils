@@ -22,7 +22,7 @@ const devDependencies = [
   "tailwindcss",
 ];
 
-/** Kept as reference. To be installed only if required. */
+// Kept as reference. To be installed only if required.
 const extraDevDependencies = ["@types/shelljs", "shelljs", "shx", "zx"];
 
 // Get config templates from the templates folder.
@@ -35,11 +35,19 @@ const templatesPath = path.resolve(
 const prettierTemplateConfig = fs.readFileSync(path.resolve(templatesPath, ".prettierrc.json"), "utf8");
 const eslintTemplateConfig = fs.readFileSync(path.resolve(templatesPath, ".eslintrc.json"), "utf8");
 
+// Install stuff before loading the package.json.
+execSync(`npm install --save-dev ${devDependencies.join(" ")}`, {
+  stdio: "inherit",
+});
+
+// Load the package.json file, to apply updates.
 const currentDir = process.cwd();
 const packageJsonPath = `${currentDir}/package.json`;
 const { default: packageJson } = await import(packageJsonPath, {
   with: { type: "json" },
 });
+
+console.log(packageJsonPath);
 console.log(packageJson);
 
 packageJson.eslintConfig = JSON.parse(eslintTemplateConfig);
@@ -51,8 +59,9 @@ packageJson.packageManager = "npm@10.5.0";
 packageJson.author = { name: "Marcelo Almeida", email: "npm@marcelocra.com" };
 packageJson.repository = { type: "git", url: "PACKAGE_REPO_URL" };
 
-execSync(`npm install --save-dev ${devDependencies.join(" ")}`, {
-  stdio: "inherit",
-});
-
+// Write the applied updates to the file.
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
+// Print the result.
+console.log(packageJson);
+
