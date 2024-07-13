@@ -19,7 +19,5 @@
     // "**/archives": true
   },
 
-  "deno.enable": true,
-  "notebook.defaultFormatter": "denoland.vscode-deno",
-  "notebook.formatOnSave.enabled": true
+  "deno.enablePaths": ["./scripts/**/*.{ts,mts,tsx,js,mjs,jsx}"]
 }
