@@ -11,6 +11,7 @@ import process from "node:process";
 const devDependencies = [
   "@tailwindcss/typography",
   "@trivago/prettier-plugin-sort-imports",
+  "@types/node",
   "autoprefixer",
   "cssnano",
   "daisyui",
