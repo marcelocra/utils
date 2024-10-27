@@ -1,4 +1,5 @@
 #!/usr/bin/env bb
+;; vim:tw=100:ts=2:sw=2:ai:et:ff=unix:fenc=utf-8:et:fixeol:eol:fdm=marker:fdl=0:fen:ft=clojure
 ;; vim: autoindent expandtab tabstop=2 shiftwidth=2
 ;;
 ;; Command line utils.
@@ -193,7 +194,7 @@
   notify-send [options] {summary} body
 
   Options:
-  --urgency={low,normal,critical} 
+  --urgency={low,normal,critical}
   --expire-time={millis}
   --icon={filename,stock icon}
   --category={type,type,...}      ;; optional, but not sure about it
@@ -212,7 +213,7 @@
                                                             "get"
                                                             "org.cinnamon.desktop.notifications"
                                                             "display-notifications")))
-        _ (and notifications-enabled? 
+        _ (and notifications-enabled?
                (notify (str
                          "About to disable notifications... won't be able to "
                          "notify you about the result, of course haha")))]
@@ -272,9 +273,9 @@
 (defn fmt
   "Formats Clojure files using cljfmt."
   []
-  (println 
-    (apply sh (-> 
-                "clj -Tcljfmt %s" 
+  (println
+    (apply sh (->
+                "clj -Tcljfmt %s"
                 (format (if (:fix args) "fix" "check"))
                 (s/split #" ")))))
 
@@ -283,10 +284,10 @@
 (defn numbered-projs []
   (let [projs (-> projects-dir
                   (fs/list-dir)
-                  (->> 
+                  (->>
                     (filter #(fs/directory? %))
-                    (into (sorted-set-by (fn [a b] (.compareTo 
-                                                     (fs/last-modified-time b) 
+                    (into (sorted-set-by (fn [a b] (.compareTo
+                                                     (fs/last-modified-time b)
                                                      (fs/last-modified-time a)))))
                     (map #(s/replace % (re-pattern (str projects-dir "/")) ""))
                     #_(s/join "\n")))
@@ -296,14 +297,16 @@
 (defn code
   "Opens VSCode with the given project."
   []
-  (let [proj (:proj args)] 
-    (if (or (nil? proj) (boolean? proj))
+  (let [proj (:proj args)]
+    (if (or (nil? proj) (boolean? proj) (= proj "--all"))
       (do
         (println "Choose one of the projects below, by name or number.")
         (println (format "They are in '%s':" projects-dir))
-        (p (numbered-projs)))
+        (if (= proj "--all")
+          (p (numbered-projs))
+          (p (take 10 numbered-projs))))
       (let [num-to-proj (numbered-projs)
-            proj-dir (io/file projects-dir (if (int? proj) 
+            proj-dir (io/file projects-dir (if (int? proj)
                                              (get num-to-proj proj (get num-to-proj 0))
                                              proj))]
         (sh "code" "." :dir proj-dir)))))
@@ -337,7 +340,7 @@
 (defn git-orphan
   "Creates a branch with no history in the current repo."
   []
-  (let [name (:name args)] 
+  (let [name (:name args)]
     (if (nil? name)
       (do
         (println "Please, provide the :name argument with a name for the new branch.")
@@ -359,7 +362,7 @@
   []
   (let [_ (js-package-mananger-note)
         name (:name args)
-        usage (s/join 
+        usage (s/join
                 "\n- "
                 (concat
                   ["Please, provide the :name argument, choosing one of the following templates:"]
@@ -377,8 +380,8 @@
                      "clj" "echo 'not ready'"
                      "cljs" "echo 'not ready'"}
             selected-option (get options name nil)]
-        (if (nil? selected-option) 
-          (display-usage-and-exit) 
+        (if (nil? selected-option)
+          (display-usage-and-exit)
           (let [cmd (s/split selected-option #" ")]
             (println cmd)
             (:out (sh cmd))))))))
