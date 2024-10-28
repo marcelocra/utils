@@ -5,13 +5,13 @@
 ;; Command line utils.
 (ns core
   (:require
-    [clojure.java.shell :refer [sh]]
-    [clojure.string :as s]
-    [babashka.fs :as fs]
-    [babashka.cli :as cli]
-    [clojure.java.io :as io]
-    [clojure.repl :refer [doc]]
-    [clojure.pprint :as pp :refer [pprint] :rename {pprint p}]))
+   [clojure.java.shell :refer [sh]]
+   [clojure.string :as s]
+   [babashka.fs :as fs]
+   [babashka.cli :as cli]
+   [clojure.java.io :as io]
+   [clojure.repl :refer [doc]]
+   [clojure.pprint :as pp :refer [pprint] :rename {pprint p}]))
 
 (def debug false)
 (def projects-dir (System/getenv "MCRA_PROJECTS_FOLDER"))
@@ -124,10 +124,10 @@
   "Prints the amount of free ram memory."
   []
   (println
-    (->>
-      (:out (sh "cat" "/proc/meminfo"))
-      (re-find #"MemFree.*")
-      (re-find #"[0-9]+.*"))))
+   (->>
+    (:out (sh "cat" "/proc/meminfo"))
+    (re-find #"MemFree.*")
+    (re-find #"[0-9]+.*"))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -217,8 +217,8 @@
                                                             "display-notifications")))
         _ (and notifications-enabled?
                (notify (str
-                         "About to disable notifications... won't be able to "
-                         "notify you about the result, of course haha")))]
+                        "About to disable notifications... won't be able to "
+                        "notify you about the result, of course haha")))]
     (let [result (sh "gsettings"
                      "set"
                      "org.cinnamon.desktop.notifications"
@@ -276,10 +276,10 @@
   "Formats Clojure files using cljfmt."
   []
   (println
-    (apply sh (->
-                "clj -Tcljfmt %s"
-                (format (if (:fix args) "fix" "check"))
-                (s/split #" ")))))
+   (apply sh (->
+              "clj -Tcljfmt %s"
+              (format (if (:fix args) "fix" "check"))
+              (s/split #" ")))))
 
 
 ;; -----------------------------------------------------------------------------
@@ -289,12 +289,12 @@
    (let [projs (-> projects-dir
                    (fs/list-dir)
                    (->>
-                     (filter #(fs/directory? %))
-                     (into (sorted-set-by (fn [a b] (.compareTo
-                                                      (fs/last-modified-time b)
-                                                      (fs/last-modified-time a)))))
-                     (map #(s/replace % (re-pattern (str projects-dir "/")) ""))
-                     #_(s/join "\n")))
+                    (filter #(fs/directory? %))
+                    (into (sorted-set-by (fn [a b] (.compareTo
+                                                    (fs/last-modified-time b)
+                                                    (fs/last-modified-time a)))))
+                    (map #(s/replace % (re-pattern (str projects-dir "/")) ""))
+                    #_(s/join "\n")))
          projs-to-use (take (or to-take (count projs)) projs)
          ids (range 0 (count projs-to-use))
          zipped (zipmap ids projs-to-use)]
@@ -370,10 +370,10 @@
   (let [_ (js-package-mananger-note)
         name (:name args)
         usage (s/join
-                "\n- "
-                (concat
-                  ["Please, provide the :name argument, choosing one of the following templates:"]
-                  templates-for-new-projects))
+               "\n- "
+               (concat
+                ["Please, provide the :name argument, choosing one of the following templates:"]
+                templates-for-new-projects))
         display-usage-and-exit (do (println usage)
                                    (System/exit 1))]
     (if (nil? name)
@@ -415,22 +415,21 @@
 
 (defn help []
   (println
-    (str "Choose one of the commands below: \n\n"
-         (s/join "\n"
-                 (map #(format "%-25s%s" (:name %) (:doc %))
-                      [(meta #'free-ram)
-                       (meta #'pretty)
-                       (meta #'time-in)
-                       (meta #'bb)
-                       (meta #'toggle-notifications)
-                       (meta #'shadow)
-                       (meta #'fmt)
-                       (meta #'code)
-                       (meta #'git-orphan)
-                       (meta #'nvmrc)
-                       (meta #'n)
-                       (meta #'login-history)
-                       ])))))
+   (str "Choose one of the commands below: \n\n"
+        (s/join "\n"
+                (map #(format "%-25s%s" (:name %) (:doc %))
+                     [(meta #'free-ram)
+                      (meta #'pretty)
+                      (meta #'time-in)
+                      (meta #'bb)
+                      (meta #'toggle-notifications)
+                      (meta #'shadow)
+                      (meta #'fmt)
+                      (meta #'code)
+                      (meta #'git-orphan)
+                      (meta #'nvmrc)
+                      (meta #'n)
+                      (meta #'login-history)])))))
 
 
 ;; Run the selected command.
@@ -455,20 +454,20 @@
 
   ;; creates one file for each of the templates
   (->
-    templates-dir
-    (io/file "bb.edn")
-    (fs/write-bytes (.getBytes "here goes the desired file content")))
+   templates-dir
+   (io/file "bb.edn")
+   (fs/write-bytes (.getBytes "here goes the desired file content")))
 
   (->
-    templates-dir
-    (io/file ".prettierrc.json")
-    (fs/write-bytes (.getBytes "here goes the desired file content")))
+   templates-dir
+   (io/file ".prettierrc.json")
+   (fs/write-bytes (.getBytes "here goes the desired file content")))
 
   ;; creates a dir for templates if it doesn't exists and/or returns its content
   (->
-    templates-dir
-    (fs/create-dirs)
-    (fs/list-dir))
+   templates-dir
+   (fs/create-dirs)
+   (fs/list-dir))
 
 
 
