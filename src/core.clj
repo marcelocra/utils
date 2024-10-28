@@ -115,6 +115,8 @@
 
 (def cmd-str (first *command-line-args*))
 
+(if debug (println args) nil)
+
 
 ;; -----------------------------------------------------------------------------
 
@@ -281,30 +283,35 @@
 
 
 ;; -----------------------------------------------------------------------------
-(defn numbered-projs []
-  (let [projs (-> projects-dir
-                  (fs/list-dir)
-                  (->>
-                    (filter #(fs/directory? %))
-                    (into (sorted-set-by (fn [a b] (.compareTo
-                                                     (fs/last-modified-time b)
-                                                     (fs/last-modified-time a)))))
-                    (map #(s/replace % (re-pattern (str projects-dir "/")) ""))
-                    #_(s/join "\n")))
-        ids (range 0 (count projs))]
-    (into (sorted-map) (zipmap ids projs))))
+(defn numbered-projs
+  ([] (numbered-projs nil))
+  ([to-take]
+   (let [projs (-> projects-dir
+                   (fs/list-dir)
+                   (->>
+                     (filter #(fs/directory? %))
+                     (into (sorted-set-by (fn [a b] (.compareTo
+                                                      (fs/last-modified-time b)
+                                                      (fs/last-modified-time a)))))
+                     (map #(s/replace % (re-pattern (str projects-dir "/")) ""))
+                     #_(s/join "\n")))
+         projs-to-use (take (or to-take (count projs)) projs)
+         ids (range 0 (count projs-to-use))
+         zipped (zipmap ids projs-to-use)]
+     (into (sorted-map) zipped))))
+
 
 (defn code
   "Opens VSCode with the given project."
   []
   (let [proj (:proj args)]
-    (if (or (nil? proj) (boolean? proj) (= proj "--all"))
+    (if (or (nil? proj) (boolean? proj) (= proj :all))
       (do
         (println "Choose one of the projects below, by name or number.")
         (println (format "They are in '%s':" projects-dir))
-        (if (= proj "--all")
+        (if (= proj :all)
           (p (numbered-projs))
-          (p (take 10 numbered-projs))))
+          (p (take 10 (numbered-projs)))))
       (let [num-to-proj (numbered-projs)
             proj-dir (io/file projects-dir (if (int? proj)
                                              (get num-to-proj proj (get num-to-proj 0))
