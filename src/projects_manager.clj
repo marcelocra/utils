@@ -1,4 +1,5 @@
 #!/usr/bin/env bb
+; vim:tw=100:ts=2:sw=2:ai:et:ff=unix:fenc=utf-8:et:fixeol:eol:fdm=marker:fdl=0:fen:ft=clojure
 
 ;; idea: symlink this as mng (for manager).
 
@@ -49,7 +50,8 @@
                 :else
                 :to-review)]
           (swap! db update to-update conj folder)))))
-  (p @db))
+  (println "\nProjects that you should look at:\n")
+  (println (s/join "\n" (map #(str "- " (.toString %)) (:to-review @db)))))
 
 
 ;; learning the api
@@ -77,5 +79,5 @@
   (sh "git" "restore" "--staged" "." :dir (.toString dir))
   (sh "git" "commit" "-m" "'remove comment (using clojure)'" "--dry-run" :dir (.toString dir))
 
-  ;; rcf - rich comment form 
+  ;; rcf - rich comment form
   )
